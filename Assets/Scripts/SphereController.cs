@@ -4,10 +4,30 @@ using UnityEngine;
 
 public class SphereController : MonoBehaviour
 {
-    public float speed = 3f;
+    private Rigidbody2D rb;
+    public Vector2 movement;
 
-    void Update()
+    public float speed = 5f;
+    private float horizontalMovement;
+    private float verticalMovement;
+
+    private void Awake()
     {
-        transform.position = new Vector2(transform.position.x + speed * Time.deltaTime, transform.position.y);
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void Update()
+    {
+        horizontalMovement = Input.GetAxis("Horizontal");
+        verticalMovement = Input.GetAxis("Vertical");
+
+        Move(horizontalMovement, verticalMovement);
+    }
+
+    private void Move(float x, float y)
+    {
+        movement.Set(x, y);
+        movement = movement.normalized * speed * Time.fixedDeltaTime;
+        rb.MovePosition(rb.position + movement);
     }
 }
